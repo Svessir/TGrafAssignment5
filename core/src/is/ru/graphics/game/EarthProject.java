@@ -7,18 +7,20 @@ import com.badlogic.gdx.graphics.*;
 import is.ru.graphics.math.ModelMatrix;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
+import is.ru.graphics.shaders.Shader;
 import is.ru.graphics.shaders.SimpleShader;
 import is.ru.graphics.shapes.SphereGraphic;
 
 public class EarthProject extends ApplicationAdapter implements InputProcessor {
 
-	SimpleShader shader;
-	Camera cam;
+	private Shader shader;
+	private Camera cam;
+	private Animatable earth;
 
 	@Override
 	public void create() {
 		shader = new SimpleShader("shaders/simple3D.vert", "shaders/simple3D.frag");
-		SphereGraphic.create(shader.getVertexPointer(), shader.getNormalPointer());
+		SphereGraphic.create();
 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -34,6 +36,8 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		cam.Look3D(new Point3D(2, 2, 2), new Point3D(0, 0, 0), new Vector3D(0, 1, 0));
 		shader.setViewMatrix(cam.getViewMatrix());
 		shader.setProjectionMatrix(cam.getProjectionMatrix());
+
+		earth = new Earth(shader);
 	}
 
 	private void update() {
@@ -42,22 +46,15 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	}
 
 	private void display() {
+		shader.setViewMatrix(cam.getViewMatrix());
+		shader.setProjectionMatrix(cam.getProjectionMatrix());
+
 		//do all actual drawing and rendering here
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		shader.setColor(0.9f, 0.3f, 0.1f, 1.0f);
-
 		ModelMatrix.main.loadIdentityMatrix();
-		//ModelMatrix.main.addTranslation(250, 250, 0);
-		ModelMatrix.main.pushMatrix();
-		ModelMatrix.main.addScale(1.0f, 1.0f, 1.0f);
-		shader.setViewMatrix(cam.getViewMatrix());
-		shader.setProjectionMatrix(cam.getProjectionMatrix());
-		SphereGraphic.drawSolidSphere();
-		//BoxGraphic.drawOutlineCube();
-		//SphereGraphic.drawSolidSphere();
-		//SphereGraphic.drawOutlineSphere();
-		ModelMatrix.main.popMatrix();
+
+		earth.draw();
 
 	}
 

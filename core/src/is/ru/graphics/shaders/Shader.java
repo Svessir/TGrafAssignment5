@@ -1,86 +1,35 @@
 package is.ru.graphics.shaders;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.nio.FloatBuffer;
 
 /**
  * Created by Sverrir on 17.10.2016.
  */
-public abstract class Shader {
+public interface Shader {
+    void setColor (float r, float g, float b, float a);
 
-    private int renderingProgramID;
-    private int vertexShaderID;
-    private int fragmentShaderID;
+    int getVertexPointer();
 
-    private int positionLoc;
-    private int normalLoc;
+    int getNormalPointer();
 
-    private int modelMatrixLoc;
-    private int viewMatrixLoc;
-    private int projectionMatrixLoc;
+    int getUvPointer();
 
-    private int colorLoc;
+    void setModelMatrix(FloatBuffer matrix);
 
+    void setViewMatrix(FloatBuffer matrix);
 
-    public Shader(String vertexShader, String fragmentShader){
-        String vertexShaderString;
-        String fragmentShaderString;
+    void setProjectionMatrix(FloatBuffer matrix);
 
-        vertexShaderString = Gdx.files.internal(vertexShader).readString();
-        fragmentShaderString =  Gdx.files.internal(fragmentShader).readString();
+    boolean usesTexture();
 
-        vertexShaderID = Gdx.gl.glCreateShader(GL20.GL_VERTEX_SHADER);
-        fragmentShaderID = Gdx.gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+    void setDiffuseTexture(Texture tex);
 
-        Gdx.gl.glShaderSource(vertexShaderID, vertexShaderString);
-        Gdx.gl.glShaderSource(fragmentShaderID, fragmentShaderString);
+    void setAlphaTexture(Texture tex);
 
-        Gdx.gl.glCompileShader(vertexShaderID);
-        System.out.println(Gdx.gl.glGetShaderInfoLog(vertexShaderID));
-        Gdx.gl.glCompileShader(fragmentShaderID);
-        System.out.println(Gdx.gl.glGetShaderInfoLog(fragmentShaderID));
+    void setBumpMapTexture(Texture tex);
 
-        renderingProgramID = Gdx.gl.glCreateProgram();
+    void setSpecularMapTexture(Texture tex);
 
-        Gdx.gl.glAttachShader(renderingProgramID, vertexShaderID);
-        Gdx.gl.glAttachShader(renderingProgramID, fragmentShaderID);
-
-        Gdx.gl.glLinkProgram(renderingProgramID);
-
-        positionLoc				= Gdx.gl.glGetAttribLocation(renderingProgramID, "a_position");
-        Gdx.gl.glEnableVertexAttribArray(positionLoc);
-
-        normalLoc				= Gdx.gl.glGetAttribLocation(renderingProgramID, "a_normal");
-        Gdx.gl.glEnableVertexAttribArray(normalLoc);
-
-        modelMatrixLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_modelMatrix");
-        viewMatrixLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_viewMatrix");
-        projectionMatrixLoc	= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_projectionMatrix");
-
-        colorLoc                = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
-
-        Gdx.gl.glUseProgram(renderingProgramID);
-    }
-
-    public void setColor (float r, float g, float b, float a) { Gdx.gl.glUniform4f(colorLoc, r, g, b, a);}
-
-    public int getVertexPointer(){
-        return  positionLoc;
-    }
-
-    public int getNormalPointer(){
-        return  normalLoc;
-    }
-
-    public void setModelMatrix(FloatBuffer matrix){
-        Gdx.gl.glUniformMatrix4fv(modelMatrixLoc, 1, false, matrix);
-    }
-
-    public void setViewMatrix(FloatBuffer matrix){
-        Gdx.gl.glUniformMatrix4fv(viewMatrixLoc, 1, false, matrix);
-    }
-
-    public void setProjectionMatrix(FloatBuffer matrix){ Gdx.gl.glUniformMatrix4fv(projectionMatrixLoc, 1, false, matrix); }
 }

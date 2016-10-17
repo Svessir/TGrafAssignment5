@@ -4,6 +4,8 @@ import java.nio.FloatBuffer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.BufferUtils;
+import is.ru.graphics.shaders.AbstractShader;
+import is.ru.graphics.shaders.Shader;
 
 /**
  * Created by Sverrir on 16.10.2016.
@@ -13,8 +15,6 @@ public class SphereGraphic {
     private static FloatBuffer vertexBuffer;
     private static FloatBuffer normalBuffer;
     private static FloatBuffer uvBuffer;
-    private static int vertexPointer;
-    private static int normalPointer;
     private static int verticesPerCircle = 50;
 
 
@@ -22,9 +22,7 @@ public class SphereGraphic {
     private static int slices = 50;
     private static int vertexCount;
 
-    public static void create(int vertexPointer, int normalPointer) {
-        SphereGraphic.vertexPointer = vertexPointer;
-        SphereGraphic.normalPointer = normalPointer;
+    public static void create() {
         //VERTEX ARRAY IS FILLED HERE
         //float[] array = new float[2*verticesPerCircle];
 
@@ -68,10 +66,13 @@ public class SphereGraphic {
         uvBuffer.rewind();
     }
 
-    public static void drawSolidSphere() {
+    public static void drawSolidSphere(Shader shader) {
 
-        Gdx.gl.glVertexAttribPointer(vertexPointer, 3, GL20.GL_FLOAT, false, 0, vertexBuffer);
-        Gdx.gl.glVertexAttribPointer(normalPointer, 3, GL20.GL_FLOAT, false, 0, normalBuffer);
+        Gdx.gl.glVertexAttribPointer(shader.getVertexPointer(), 3, GL20.GL_FLOAT, false, 0, vertexBuffer);
+        Gdx.gl.glVertexAttribPointer(shader.getNormalPointer(), 3, GL20.GL_FLOAT, false, 0, normalBuffer);
+
+        if(shader.usesTexture())
+            Gdx.gl.glVertexAttribPointer(shader.getUvPointer(), 2, GL20.GL_FLOAT, false, 0, uvBuffer);
 
         for(int i = 0; i < vertexCount; i += (slices+1)*2)
         {
@@ -81,10 +82,10 @@ public class SphereGraphic {
 
     }
 
-    public static void drawOutlineSphere() {
+    public static void drawOutlineSphere(Shader shader) {
 
-        Gdx.gl.glVertexAttribPointer(vertexPointer, 3, GL20.GL_FLOAT, false, 0, vertexBuffer);
-        Gdx.gl.glVertexAttribPointer(normalPointer, 3, GL20.GL_FLOAT, false, 0, normalBuffer);
+        Gdx.gl.glVertexAttribPointer(shader.getVertexPointer(), 3, GL20.GL_FLOAT, false, 0, vertexBuffer);
+        Gdx.gl.glVertexAttribPointer(shader.getNormalPointer(), 3, GL20.GL_FLOAT, false, 0, normalBuffer);
 
         for(int i = 0; i < vertexCount; i += (slices+1)*2)
         {
