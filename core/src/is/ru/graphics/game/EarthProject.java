@@ -17,7 +17,7 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void create() {
-		shader = new SimpleShader();
+		shader = new SimpleShader("shaders/simple3D.vert", "shaders/simple3D.frag");
 		SphereGraphic.create(shader.getVertexPointer(), shader.getNormalPointer());
 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

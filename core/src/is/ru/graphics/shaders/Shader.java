@@ -8,7 +8,7 @@ import java.nio.FloatBuffer;
 /**
  * Created by Sverrir on 17.10.2016.
  */
-public class Shader {
+public abstract class Shader {
 
     private int renderingProgramID;
     private int vertexShaderID;
@@ -24,12 +24,12 @@ public class Shader {
     private int colorLoc;
 
 
-    public Shader(){
+    public Shader(String vertexShader, String fragmentShader){
         String vertexShaderString;
         String fragmentShaderString;
 
-        vertexShaderString = Gdx.files.internal("shaders/simple3D.vert").readString();
-        fragmentShaderString =  Gdx.files.internal("shaders/simple3D.frag").readString();
+        vertexShaderString = Gdx.files.internal(vertexShader).readString();
+        fragmentShaderString =  Gdx.files.internal(fragmentShader).readString();
 
         vertexShaderID = Gdx.gl.glCreateShader(GL20.GL_VERTEX_SHADER);
         fragmentShaderID = Gdx.gl.glCreateShader(GL20.GL_FRAGMENT_SHADER);
