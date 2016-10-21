@@ -29,13 +29,13 @@ public class SphereGraphic {
         vertexCount = 0;
         float[] array = new float[(stacks)*(slices+1)*6];
         float[] uvArray = new float[(stacks) * (slices + 1) * 4];
-        float stackInterval = (float)Math.PI / (float)stacks;
-        float sliceInterval = 2.0f*(float)Math.PI / (float)slices;
+        float stackInterval = -(float)Math.PI / (float)stacks;
+        float sliceInterval = -2.0f*(float)Math.PI / (float)slices;
         float stackAngle, sliceAngle;
         for(int stackCount = 0; stackCount < stacks; stackCount++)
         {
             stackAngle = stackCount * stackInterval;
-            for(int sliceCount = 0; sliceCount < slices+1; sliceCount++)
+            for(int sliceCount = 0; sliceCount <= slices; sliceCount++)
             {
                 sliceAngle = sliceCount * sliceInterval;
                 array[vertexCount*3] = 	 (float)Math.sin(stackAngle) * (float)Math.cos(sliceAngle);

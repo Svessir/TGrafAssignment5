@@ -3,13 +3,15 @@ package is.ru.graphics.shaders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import is.ru.graphics.math.Point3D;
+import is.ru.graphics.math.Vector3D;
 
 import java.nio.FloatBuffer;
 
 /**
  * Created by Sverrir on 17.10.2016.
  */
-public abstract class AbstractShader implements Shader {
+public abstract class AbstractShader implements Shader{
 
     protected int renderingProgramID;
     protected int vertexShaderID;
@@ -19,11 +21,21 @@ public abstract class AbstractShader implements Shader {
     protected int normalLoc;
     protected int uvLoc;
 
+    protected int lightPositionLoc;
+    protected int cameraPositionLoc;
+
     protected int modelMatrixLoc;
     protected int viewMatrixLoc;
     protected int projectionMatrixLoc;
 
-    protected int colorLoc;
+    protected int lightAmbientLoc;
+    protected int lightDiffuseLoc;
+    protected int lightSpecularLoc;
+
+    protected int materialAmbientLoc;
+    protected int materialDiffuseLoc;
+    protected int materialSpecularLoc;
+    protected int materialShininessLoc;
 
     protected boolean usesDiffuseTexture = false;
     protected boolean usesAlphaTexture = false;
@@ -73,6 +85,15 @@ public abstract class AbstractShader implements Shader {
         uvLoc				= Gdx.gl.glGetAttribLocation(renderingProgramID, "a_uv");
         Gdx.gl.glEnableVertexAttribArray(uvLoc);
 
+        lightAmbientLoc         = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightAmbient");
+        lightDiffuseLoc         = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightDiffuse");
+        lightSpecularLoc        = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightSpecular");
+        materialAmbientLoc      = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialAmbient");
+        materialDiffuseLoc      = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
+        materialSpecularLoc     = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialSpecular");
+        materialShininessLoc    = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialShininess");
+        lightPositionLoc        = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
+        cameraPositionLoc       = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_cameraPosition");
         usesDiffuseTexLoc		= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_usesDiffuseTexture");
         diffuseTextureLoc		= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_diffuseTexture");
         usesAlphaTexLoc		    = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_usesAlphaTexture");
@@ -91,70 +112,90 @@ public abstract class AbstractShader implements Shader {
         viewMatrixLoc			= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_viewMatrix");
         projectionMatrixLoc	= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_projectionMatrix");
 
-        colorLoc                = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_color");
-
         Gdx.gl.glUseProgram(renderingProgramID);
     }
 
-    @Override
-    public void setColor (float r, float g, float b, float a) { Gdx.gl.glUniform4f(colorLoc, r, g, b, a);}
-
-    @Override
     public int getVertexPointer(){
         return  positionLoc;
     }
 
-    @Override
     public int getNormalPointer(){
         return  normalLoc;
     }
 
-    @Override
     public int getUvPointer() {
         return uvLoc;
     }
 
-    @Override
     public void setModelMatrix(FloatBuffer matrix){
         Gdx.gl.glUniformMatrix4fv(modelMatrixLoc, 1, false, matrix);
     }
 
-    @Override
     public void setViewMatrix(FloatBuffer matrix){
         Gdx.gl.glUniformMatrix4fv(viewMatrixLoc, 1, false, matrix);
     }
 
-    @Override
     public boolean usesTexture() {
         return usesDiffuseTexture || usesAlphaTexture || usesBumpTexture || usesSpecularTexture;
     }
 
-    @Override
     public void setDiffuseTexture(Texture tex) {
         usesDiffuseTexture = tex != null ? true : false;
         bindTexture(tex, 0, diffuseTextureLoc, usesDiffuseTexLoc);
     }
 
-    @Override
     public void setAlphaTexture(Texture tex) {
         usesAlphaTexture = tex != null ? true : false;
         bindTexture(tex, 1, alphaTextureLoc, usesAlphaTexLoc);
     }
 
-    @Override
     public void setBumpMapTexture(Texture tex) {
         usesBumpTexture = tex != null ? true : false;
         bindTexture(tex, 2, bumpTextureLoc, usesBumpTexLoc);
     }
 
-    @Override
     public void setSpecularMapTexture(Texture tex) {
         usesSpecularTexture = tex != null ? true : false;
         bindTexture(tex, 3, specularTextureLoc, usesSpecularTexLoc);
     }
 
-    @Override
+    public void setLightPosition(Point3D lightPosition) {
+        Gdx.gl.glUniform4f(lightPositionLoc, lightPosition.x, lightPosition.y, lightPosition.z, 1f);
+    }
+
+    public void setCameraPosition(Point3D cameraPosition) {
+        Gdx.gl.glUniform4f(cameraPositionLoc, cameraPosition.x, cameraPosition.y, cameraPosition.z, 1f);
+    }
+
     public void setProjectionMatrix(FloatBuffer matrix){ Gdx.gl.glUniformMatrix4fv(projectionMatrixLoc, 1, false, matrix); }
+
+    public void setLightAmbient(float r, float g, float b, float a) {
+        Gdx.gl.glUniform4f(lightAmbientLoc, r, g, b, a);
+    }
+
+    public void setLightDiffuse(float r, float g, float b, float a) {
+        Gdx.gl.glUniform4f(lightDiffuseLoc, r, g, b, a);
+    }
+
+    public void setLightSpecular(float r, float g, float b, float a) {
+        Gdx.gl.glUniform4f(lightSpecularLoc, r, g, b, a);
+    }
+
+    public void setMaterialAmbient(float r, float g, float b, float a) {
+        Gdx.gl.glUniform4f(materialAmbientLoc, r, g, b, a);
+    }
+
+    public void setMaterialDiffuse(float r, float g, float b, float a) {
+        Gdx.gl.glUniform4f(materialDiffuseLoc, r, g, b, a);
+    }
+
+    public void setMaterialSpecular(float r, float g, float b, float a) {
+        Gdx.gl.glUniform4f(materialSpecularLoc, r, g, b, a);
+    }
+
+    public void setMaterialShininess(float materialShininess) {
+        Gdx.gl.glUniform1f(materialShininessLoc, materialShininess);
+    }
 
     protected void bindTexture(Texture tex, int layer, int textureLoc, int usesTextureLoc) {
         if(tex == null)

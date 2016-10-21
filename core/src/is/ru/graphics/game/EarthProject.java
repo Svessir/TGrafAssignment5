@@ -7,19 +7,18 @@ import com.badlogic.gdx.graphics.*;
 import is.ru.graphics.math.ModelMatrix;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
-import is.ru.graphics.shaders.Shader;
-import is.ru.graphics.shaders.SimpleShader;
+import is.ru.graphics.shaders.EarthShader;
 import is.ru.graphics.shapes.SphereGraphic;
 
 public class EarthProject extends ApplicationAdapter implements InputProcessor {
 
-	private Shader shader;
+	private EarthShader shader;
 	private Camera cam;
 	private Animatable earth;
 
 	@Override
 	public void create() {
-		shader = new SimpleShader("shaders/simple3D.vert", "shaders/simple3D.frag");
+		shader = new EarthShader();
 		SphereGraphic.create();
 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -32,7 +31,8 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
 
 		cam = new Camera();
-		cam.PerspctiveProjection3D(90, 1, 1, 100);
+		cam.PerspctiveProjection3D(90, 16f/9f, 0.001f, 100);
+		//cam.OrthographicProjection3D(0, Gdx.graphics.getWidth(), 0, Gdx.graphics.getHeight(), 0.01f, 100);
 		cam.Look3D(new Point3D(2, 2, 2), new Point3D(0, 0, 0), new Vector3D(0, 1, 0));
 		shader.setViewMatrix(cam.getViewMatrix());
 		shader.setProjectionMatrix(cam.getProjectionMatrix());
@@ -46,8 +46,14 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	}
 
 	private void display() {
+		Gdx.gl.glViewport(0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		shader.setViewMatrix(cam.getViewMatrix());
 		shader.setProjectionMatrix(cam.getProjectionMatrix());
+		shader.setLightPosition(new Point3D(0, 2, 2));
+		shader.setCameraPosition(cam.eye);
+		shader.setLightAmbient(1f,1f,1f,1);
+		shader.setLightDiffuse(1,1,1,1);
+		shader.setLightSpecular(0,0,0,0);
 
 		//do all actual drawing and rendering here
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
