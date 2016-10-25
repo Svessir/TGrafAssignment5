@@ -82,6 +82,20 @@ public class SphereGraphic {
 
     }
 
+    public static void drawSolidSphere(Shader shader, int number) {
+
+        Gdx.gl.glVertexAttribPointer(shader.getVertexPointer(), 3, GL20.GL_FLOAT, false, 0, vertexBuffer);
+        Gdx.gl.glVertexAttribPointer(shader.getNormalPointer(), 3, GL20.GL_FLOAT, false, 0, normalBuffer);
+
+
+        for(int i = 0; i < vertexCount; i += (slices+1)*2)
+        {
+            Gdx.gl.glDrawArrays(GL20.GL_TRIANGLE_STRIP, i, (slices+1)*2);
+        }
+
+
+    }
+
     public static void drawOutlineSphere(Shader shader) {
 
         Gdx.gl.glVertexAttribPointer(shader.getVertexPointer(), 3, GL20.GL_FLOAT, false, 0, vertexBuffer);

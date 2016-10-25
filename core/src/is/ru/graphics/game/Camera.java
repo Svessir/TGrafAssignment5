@@ -8,9 +8,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.BufferUtils;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
+import is.ru.graphics.shaders.EarthShader;
 
 public class Camera {
-	private Vector3D n;
+	public Vector3D n;
 	private Vector3D u;
 	private Vector3D v;
 	public Point3D eye;
@@ -23,6 +24,8 @@ public class Camera {
 	private float top;
 	private float near;
 	private float far;
+
+	private boolean turnedOn = false;
 
 	private final float speed = 1.1f;
 	private final float rotationPerSecond = 60f;
@@ -182,9 +185,15 @@ public class Camera {
 		return matrixBuffer;
 	}
 
-	public void update(float deltatime) {
+	public void update(EarthShader shader, float deltatime) {
 		input(deltatime);
 		slide(velocity.x, velocity.y, velocity.z);
+		if(turnedOn){
+			shader.setCameraLightDirection(new Point3D(-n.x, -n.y, -n.z));
+		}
+		else{
+			shader.setCameraLightDirection(new Point3D(n.x, n.y, n.z));
+		}
 	}
 
 	private void input(float deltaTime) {
@@ -209,10 +218,10 @@ public class Camera {
 		}
 		/*if(Gdx.input.isKeyPressed(Input.Keys.R)) {
 			velocity.y -= speed  * deltaTime;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
-			velocity.y += speed  * deltaTime;
 		}*/
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			turnedOn = !turnedOn;
+		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
 			velocity.z -= speed  * deltaTime;
 		}
