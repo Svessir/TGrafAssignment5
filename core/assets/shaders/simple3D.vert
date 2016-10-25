@@ -9,6 +9,7 @@ attribute vec2 a_uv;
 
 uniform vec4 u_cameraPosition;
 uniform vec4 u_lightPosition;
+uniform vec4 u_cameraLightPosition;
 
 uniform mat4 u_modelMatrix;
 uniform mat4 u_viewMatrix;
@@ -18,6 +19,7 @@ varying vec4 v_h;
 varying vec4 v_s;
 varying vec2 v_uv;
 varying vec4 v_normal;
+varying vec4 v_sCam;
 
 void main()
 {
@@ -30,6 +32,8 @@ void main()
 	vec4 v = normalize(u_cameraPosition - position);
 	v_s = normalize(u_lightPosition - position);
 	v_h = normalize(v_s + v);
+
+    v_sCam = normalize(u_cameraLightPosition - position);
 
     v_uv = a_uv;
 

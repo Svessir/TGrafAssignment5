@@ -17,12 +17,14 @@ public class Earth implements Animatable {
     Texture dayDiffuse;
     Texture nightDiffuse;
     Texture specularMap;
+    private float diameter;
 
-    public Earth(EarthShader shader) {
+    public Earth(EarthShader shader, float diameter) {
         this.shader = shader;
         dayDiffuse = new Texture(Gdx.files.internal("textures/Albedo.jpg"));
-        nightDiffuse = new Texture(Gdx.files.internal("textures/night_lights_modified.png"));
+        nightDiffuse = new Texture(Gdx.files.internal("textures/night_Lights_modified.png"));
         specularMap = new Texture(Gdx.files.internal("textures/Ocean_Mask.png"));
+        this.diameter = diameter;
     }
 
     @Override
@@ -33,11 +35,11 @@ public class Earth implements Animatable {
     @Override
     public void draw() {
         ModelMatrix.main.pushMatrix();
-        ModelMatrix.main.addScale(2,2,2);
+        ModelMatrix.main.addScale(diameter,diameter,diameter);
         shader.setMaterialAmbient(0.5f,0.5f,0.5f,1);
-        shader.setMaterialSpecular(0,0,0,0);
+        shader.setMaterialSpecular(1,1,1,1);
         shader.setMaterialDiffuse(1,1,1,1);
-        shader.setMaterialShininess(0);
+        shader.setMaterialShininess(150);
         shader.setDiffuseTexture(dayDiffuse);
         shader.setUsesNightLightDiffuseTex(nightDiffuse);
         shader.setSpecularMapTexture(specularMap);

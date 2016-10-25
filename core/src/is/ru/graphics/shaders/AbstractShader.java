@@ -22,6 +22,8 @@ public abstract class AbstractShader implements Shader{
     protected int uvLoc;
 
     protected int lightPositionLoc;
+    protected int cameraLightPositionLoc;
+    protected int camLightDirectionLoc;
     protected int cameraPositionLoc;
 
     protected int modelMatrixLoc;
@@ -92,7 +94,9 @@ public abstract class AbstractShader implements Shader{
         materialDiffuseLoc      = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialDiffuse");
         materialSpecularLoc     = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialSpecular");
         materialShininessLoc    = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_materialShininess");
-        lightPositionLoc        = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");
+        lightPositionLoc        = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_lightPosition");;
+        cameraLightPositionLoc  = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_cameraLightPosition");
+        camLightDirectionLoc    = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_cameraLightDirection");
         cameraPositionLoc       = Gdx.gl.glGetUniformLocation(renderingProgramID, "u_cameraPosition");
         usesDiffuseTexLoc		= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_usesDiffuseTexture");
         diffuseTextureLoc		= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_diffuseTexture");
@@ -161,6 +165,14 @@ public abstract class AbstractShader implements Shader{
 
     public void setLightPosition(Point3D lightPosition) {
         Gdx.gl.glUniform4f(lightPositionLoc, lightPosition.x, lightPosition.y, lightPosition.z, 1f);
+    }
+
+    public void setCameraLightPosition(Point3D cameraLightPosition) {
+        Gdx.gl.glUniform4f(cameraLightPositionLoc, cameraLightPosition.x, cameraLightPosition.y, cameraLightPosition.z, 1f);
+    }
+
+    public void setCameraLightDirection(Point3D lightDirection) {
+        Gdx.gl.glUniform4f(camLightDirectionLoc, lightDirection.x, lightDirection.y, lightDirection.z, 1f);
     }
 
     public void setCameraPosition(Point3D cameraPosition) {

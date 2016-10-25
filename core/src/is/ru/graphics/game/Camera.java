@@ -82,6 +82,43 @@ public class Camera {
 		n.x = tmp;
 	}
 
+	public void yaw(float angle){
+		float c = (float)Math.cos((double)angle * Math.PI / 180.0);
+		float s = (float)Math.sin((double)angle * Math.PI / 180.0);
+		float tmp ;
+
+		tmp = c * u.x - s * n.x;
+		n.x = s * u.x + c * n.x;
+		u.x = tmp;
+
+		tmp = c * u.y - s * n.y;
+		n.y = s * u.y + c * n.y;
+		u.y = tmp;
+
+		tmp = c * u.z - s * n.z;
+		n.z = s * u.z + c * n.z;
+		u.z = tmp;
+	}
+
+	public void pitch(float angle) {
+		float c = (float) Math.cos((double) angle * Math.PI / 180.0);
+		float s = (float) Math.sin((double) angle * Math.PI / 180.0);
+
+		float tmp;
+
+		tmp = v.x * c + n.x * s;
+		n.x = v.x * (-s) + n.x * c;
+		v.x = tmp;
+
+		tmp = v.y * c + n.y * s;
+		n.y = v.y * (-s) + n.y * c;
+		v.y = tmp;
+
+		tmp = v.z * c + n.z * s;
+		n.z = v.z * (-s) + n.z * c;
+		v.z = tmp;
+	}
+
 	public void OrthographicProjection3D(float left, float right, float bottom, float top, float near, float far) {
 		this.left = left;
 		this.right = right;
@@ -158,12 +195,24 @@ public class Camera {
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			yawIgnoreY(-rotationPerSecond * deltaTime);
 		}
+		if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+			pitch(rotationPerSecond * deltaTime);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+			pitch(-rotationPerSecond * deltaTime);
+		}
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
 			velocity.x -= speed * deltaTime;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
 			velocity.x += speed  * deltaTime;
 		}
+		/*if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+			velocity.y -= speed  * deltaTime;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			velocity.y += speed  * deltaTime;
+		}*/
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
 			velocity.z -= speed  * deltaTime;
 		}
@@ -174,6 +223,7 @@ public class Camera {
 		Vector3D oldVelocity = velocity;
 		velocity = new Vector3D(0,0,0);
 		velocity.x = oldVelocity.x * u.x + oldVelocity.y * v.x + oldVelocity.z * n.x;
+		//velocity.y = oldVelocity.x * u.x + oldVelocity.y * v.x + oldVelocity.z * n.x;
 		velocity.z = oldVelocity.x * u.z + oldVelocity.y * v.z + oldVelocity.z * n.z;
 	}
 
