@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.*;
-import is.ru.graphics.math.Matrix;
 import is.ru.graphics.math.ModelMatrix;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
@@ -63,7 +62,7 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	private void update() {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		cam.update(deltaTime);
-		angle += 180.0f * deltaTime;
+		angle += 10f * deltaTime;
 
 	}
 
@@ -72,12 +71,13 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		float s = (float)Math.sin((angle / 2.0) * Math.PI / 180.0);
 		float c = (float)Math.cos((angle / 2.0) * Math.PI / 180.0);
 		Vector3D cameraLightDirection = cam.getLightDirection();
+		Point3D lightPosition = new Point3D(200 * s, 0, -150 * c);
 
 		/////////////// Earth shader /////////////////////
 		shader.useShader();
 		shader.setViewMatrix(cam.getViewMatrix());
 		shader.setProjectionMatrix(cam.getProjectionMatrix());
-		shader.setLightPosition(new Point3D(-200, 100, -100));
+		shader.setLightPosition(lightPosition);
 		shader.setCameraLightPosition(cam.eye);
 		shader.setCameraLightDirection(cameraLightDirection);
 		shader.setCameraPosition(cam.eye);
@@ -93,18 +93,23 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 
 		earth.draw();
 
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(Gdx.gl20.GL_SRC_ALPHA, Gdx.gl20.GL_ONE_MINUS_SRC_ALPHA);
 
 		/////////////// Cloud shader /////////////////////
 		cloudShader.useShader();
 		cloudShader.setViewMatrix(cam.getViewMatrix());
 		cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
-		cloudShader.setLightPosition(new Point3D(-200, 100, -100));
+		cloudShader.setLightPosition(lightPosition);
+		cloudShader.setCameraLightDirection(cameraLightDirection);
+		cloudShader.setCameraLightPosition(cam.eye);
 		cloudShader.setCameraPosition(cam.eye);
 		cloudShader.setLightAmbient(0f,0f,0f,1);
 		cloudShader.setLightDiffuse(1,1,1,1);
-		cloudShader.setLightSpecular(0,0,0,0);
+		cloudShader.setLightSpecular(0,0,0,1);
 
 		clouds.draw();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
 
 
 	}

@@ -49,7 +49,7 @@ void main()
         //gl_FragColor = objectColor * texture2D(u_diffuseTexture, v_uv) + invertObjectColor * texture2D(u_nightLightDiffuseTexture, v_uv);
         lambert += spotLambert * spotAttenuation;
         gl_FragColor = (pow(lambert, 0.7) * texture2D(u_diffuseTexture, v_uv))
-                        + (1.0 - pow(lambert,0.35)) * texture2D(u_nightLightDiffuseTexture, v_uv);
+                        + (1.0 - pow(lambert,0.35)) * (texture2D(u_nightLightDiffuseTexture, v_uv) * 0.5);
     }
     if(u_usesAlphaTexture == 1.0)
     {
