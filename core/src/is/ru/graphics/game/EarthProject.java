@@ -27,13 +27,15 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public void create() {
 		shader = new EarthShader();
-		//cloudShader = new CloudShader();
+		cloudShader = new CloudShader();
+
 		/*backgroundSounds = new Sounds();
 		try {
 			backgroundSounds.playSound();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}*/
+
 		SphereGraphic.create();
 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -46,21 +48,21 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
 
 		cam = new Camera();
-		cam.PerspctiveProjection3D(90, 16f/9f, 0.001f, 100);
+		cam.PerspctiveProjection3D(90, 16f/9f, 0.1f, 100);
 		//cam.OrthographicProjection3D(0, Gdx.graphics.getWidth(), 0, Gdx.graphics.getHeight(), 0.01f, 100);
 		cam.Look3D(new Point3D(2, 2, 2), new Point3D(0, 0, 0), new Vector3D(0, 1, 0));
 		shader.setViewMatrix(cam.getViewMatrix());
 		shader.setProjectionMatrix(cam.getProjectionMatrix());
-		//cloudShader.setViewMatrix(cam.getViewMatrix());
-		//cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
+		cloudShader.setViewMatrix(cam.getViewMatrix());
+		cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
 
 		earth = new Earth(shader,earthDiameter);
-		//clouds = new Clouds(cloudShader, earthDiameter*1.2f);
+		clouds = new Clouds(cloudShader, earthDiameter*1.01f);
 	}
 
 	private void update() {
 		float deltaTime = Gdx.graphics.getDeltaTime();
-		cam.update(shader, deltaTime);
+		cam.update(deltaTime);
 		angle += 180.0f * deltaTime;
 
 	}
@@ -69,29 +71,40 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glViewport(0 , 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		float s = (float)Math.sin((angle / 2.0) * Math.PI / 180.0);
 		float c = (float)Math.cos((angle / 2.0) * Math.PI / 180.0);
+		Vector3D cameraLightDirection = cam.getLightDirection();
+
+		/////////////// Earth shader /////////////////////
+		shader.useShader();
 		shader.setViewMatrix(cam.getViewMatrix());
 		shader.setProjectionMatrix(cam.getProjectionMatrix());
 		shader.setLightPosition(new Point3D(-200, 100, -100));
-		shader.setCameraLightPosition(new Point3D(cam.eye.x, cam.eye.y, cam.eye.z));
-		//shader.setCameraLightDirection(new Point3D(-cam.n.x, -cam.n.y, -cam.n.z));
+		shader.setCameraLightPosition(cam.eye);
+		shader.setCameraLightDirection(cameraLightDirection);
 		shader.setCameraPosition(cam.eye);
 		shader.setLightAmbient(0f,0f,0f,1);
 		shader.setLightDiffuse(0,0,0,1);
 		shader.setLightSpecular(0,0,0,0);
-		/*cloudShader.setViewMatrix(cam.getViewMatrix());
-		cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
-		cloudShader.setLightPosition(new Point3D(-200, 100, -100));
-		cloudShader.setLightAmbient(0f,0f,0f,1);
-		cloudShader.setLightDiffuse(1,1,1,1);
-		cloudShader.setLightSpecular(1,1,1,1);
-		cloudShader.setCameraPosition(cam.eye);*/
+
+
 		//do all actual drawing and rendering here
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		ModelMatrix.main.loadIdentityMatrix();
 
 		earth.draw();
-		//clouds.draw();
+
+
+		/////////////// Cloud shader /////////////////////
+		cloudShader.useShader();
+		cloudShader.setViewMatrix(cam.getViewMatrix());
+		cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
+		cloudShader.setLightPosition(new Point3D(-200, 100, -100));
+		cloudShader.setCameraPosition(cam.eye);
+		cloudShader.setLightAmbient(0f,0f,0f,1);
+		cloudShader.setLightDiffuse(1,1,1,1);
+		cloudShader.setLightSpecular(0,0,0,0);
+
+		clouds.draw();
 
 
 	}

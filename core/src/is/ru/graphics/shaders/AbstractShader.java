@@ -171,7 +171,7 @@ public abstract class AbstractShader implements Shader{
         Gdx.gl.glUniform4f(cameraLightPositionLoc, cameraLightPosition.x, cameraLightPosition.y, cameraLightPosition.z, 1f);
     }
 
-    public void setCameraLightDirection(Point3D lightDirection) {
+    public void setCameraLightDirection(Vector3D lightDirection) {
         Gdx.gl.glUniform4f(camLightDirectionLoc, lightDirection.x, lightDirection.y, lightDirection.z, 1f);
     }
 
@@ -207,6 +207,10 @@ public abstract class AbstractShader implements Shader{
 
     public void setMaterialShininess(float materialShininess) {
         Gdx.gl.glUniform1f(materialShininessLoc, materialShininess);
+    }
+
+    public void useShader() {
+        Gdx.gl.glUseProgram(renderingProgramID);
     }
 
     protected void bindTexture(Texture tex, int layer, int textureLoc, int usesTextureLoc) {

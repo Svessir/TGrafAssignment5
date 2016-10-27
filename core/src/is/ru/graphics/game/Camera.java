@@ -1,14 +1,12 @@
 package is.ru.graphics.game;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.BufferUtils;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
-import is.ru.graphics.shaders.EarthShader;
 
 public class Camera {
 	public Vector3D n;
@@ -185,15 +183,17 @@ public class Camera {
 		return matrixBuffer;
 	}
 
-	public void update(EarthShader shader, float deltatime) {
+	public void update(float deltatime) {
 		input(deltatime);
 		slide(velocity.x, velocity.y, velocity.z);
-		if(turnedOn){
-			shader.setCameraLightDirection(new Point3D(-n.x, -n.y, -n.z));
-		}
-		else{
-			shader.setCameraLightDirection(new Point3D(n.x, n.y, n.z));
-		}
+	}
+
+	public boolean isLightTurnedOn() {
+		return turnedOn;
+	}
+
+	public Vector3D getLightDirection() {
+		return turnedOn ? new Vector3D(-n.x, -n.y, -n.z) : new Vector3D(n.x, n.y, n.z);
 	}
 
 	private void input(float deltaTime) {

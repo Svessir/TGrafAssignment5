@@ -25,7 +25,6 @@ void main()
 
 	vec4 normal = vec4(a_normal.x, a_normal.y, a_normal.z, 0.0);
 	normal = u_modelMatrix * normal;
-    v_normal = normal;
 
     vec4 v = normalize(u_cameraPosition - position);
     v_s = normalize(u_lightPosition - position);
@@ -34,6 +33,7 @@ void main()
 
 	position = u_viewMatrix * position;
 	//normal = u_viewMatrix * normal;
+    v_normal = normal;
 
 	gl_Position = u_projectionMatrix * position;
 }
