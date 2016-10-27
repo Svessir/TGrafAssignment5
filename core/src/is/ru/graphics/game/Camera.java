@@ -219,7 +219,7 @@ public class Camera {
 		/*if(Gdx.input.isKeyPressed(Input.Keys.R)) {
 			velocity.y -= speed  * deltaTime;
 		}*/
-		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 			turnedOn = !turnedOn;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
