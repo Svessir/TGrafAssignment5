@@ -35,7 +35,7 @@ void main()
     if(u_usesAlphaTexture == 1.0) {
         gl_FragColor = objectColor;
         vec4 color = texture2D(u_alphaTexture, v_uv);
-        gl_FragColor.a = (color.x * color.y * color.z) * 2;
+        gl_FragColor.a = (color.x * color.y * color.z) * 2.0;
         return;
     }
 

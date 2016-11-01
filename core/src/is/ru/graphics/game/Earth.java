@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import is.ru.graphics.math.ModelMatrix;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.shaders.EarthShader;
-import is.ru.graphics.shaders.Shader;
 import is.ru.graphics.shapes.SphereGraphic;
 
 /**
@@ -30,12 +29,25 @@ public class Earth implements Animatable {
     }
 
     @Override
-    public void update() {
+    public void update(float deltatime) {
 
     }
 
     @Override
     public void draw() {
+        Camera cam = Camera.getInstance();
+        Point3D lightPosition = Sun.getInstance().getPosition();
+        shader.useShader();
+        shader.setViewMatrix(cam.getViewMatrix());
+        shader.setProjectionMatrix(cam.getProjectionMatrix());
+        shader.setLightPosition(lightPosition);
+        shader.setCameraLightPosition(cam.eye);
+        shader.setCameraLightDirection(cam.getLightDirection());
+        shader.setCameraPosition(cam.eye);
+        shader.setLightAmbient(0f,0f,0f,1);
+        shader.setLightDiffuse(0,0,0,1);
+        shader.setLightSpecular(0,0,0,0);
+
         ModelMatrix.main.pushMatrix();
         ModelMatrix.main.addScale(diameter,diameter,diameter);
         shader.setMaterialAmbient(0.5f,0.5f,0.5f,1);

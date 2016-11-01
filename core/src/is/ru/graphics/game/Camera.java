@@ -31,7 +31,13 @@ public class Camera {
 	private FloatBuffer matrixBuffer;
 	private Vector3D velocity;
 
-	public Camera(){
+	private static Camera instance = new Camera();
+
+	public static Camera getInstance() {
+		return instance;
+	}
+
+	private Camera(){
 		matrixBuffer = BufferUtils.newFloatBuffer(16);
 
 		eye = new Point3D();

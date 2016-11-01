@@ -5,6 +5,6 @@ package is.ru.graphics.game;
  */
 public interface Animatable {
 
-    void update();
+    void update(float deltatime);
     void draw();
 }
