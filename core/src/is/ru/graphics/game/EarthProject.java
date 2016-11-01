@@ -62,7 +62,7 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	private void update() {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		cam.update(deltaTime);
-		angle += 10f * deltaTime;
+		angle += 50f * deltaTime;
 
 	}
 

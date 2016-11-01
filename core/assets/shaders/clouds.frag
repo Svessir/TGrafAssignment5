@@ -37,13 +37,12 @@ void main()
     float lambert = max(0.0, dot(v_s, v_normal)/(length(v_s) * length(v_normal)));
     float phong = max(0.0, dot(v_h, v_normal)/(length(v_h) * length(v_normal)));
 
-    vec4 objectColor = u_lightAmbient*u_materialAmbient + u_lightDiffuse*u_materialDiffuse*lambert
-                           + u_lightSpecular*u_materialSpecular*pow(phong, u_materialShininess);
+    vec4 objectColor = u_lightAmbient*u_materialAmbient + u_lightDiffuse*u_materialDiffuse*lambert;
 
     if(u_usesDiffuseTexture == 1.0) {
         gl_FragColor = objectColor + spotLambert * spotAttenuation;
         vec4 color = texture2D(u_diffuseTexture, v_uv);
-        gl_FragColor.a = (color.x * color.y * color.z) * 2;
+        gl_FragColor.a = (color.x * color.y * color.z) * 2.0;
         return;
     }
     if(u_usesAlphaTexture == 1.0) {
