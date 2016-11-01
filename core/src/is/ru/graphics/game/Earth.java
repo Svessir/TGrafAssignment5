@@ -17,6 +17,7 @@ public class Earth implements Animatable {
     Texture dayDiffuse;
     Texture nightDiffuse;
     Texture specularMap;
+    Texture alphaTexture;
     private float diameter;
 
     public Earth(EarthShader shader, float diameter) {
@@ -24,6 +25,7 @@ public class Earth implements Animatable {
         dayDiffuse = new Texture(Gdx.files.internal("textures/Albedo.jpg"));
         nightDiffuse = new Texture(Gdx.files.internal("textures/night_Lights_modified.png"));
         specularMap = new Texture(Gdx.files.internal("textures/Ocean_Mask.png"));
+        this.alphaTexture = new Texture(Gdx.files.internal("textures/Clouds.png"));
         this.diameter = diameter;
     }
 

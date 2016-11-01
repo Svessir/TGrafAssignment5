@@ -32,8 +32,7 @@ public class Clouds implements Animatable{
         ModelMatrix.main.addScale(diameter,diameter,diameter);
         shader.setMaterialDiffuse(1,1,1,1);
         shader.setModelMatrix(ModelMatrix.main.getMatrix());
-        shader.setDiffuseTexture(texture);
-        //shader.setAlphaTexture(texture);
+        shader.setAlphaTexture(texture);
         SphereGraphic.drawSolidSphere(shader);
         ModelMatrix.main.popMatrix();
     }
