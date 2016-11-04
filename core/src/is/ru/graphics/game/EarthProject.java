@@ -19,7 +19,11 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	private Camera cam;
 	private Animatable earth;
 	private Animatable clouds;
-	private Sounds backgroundSounds;
+
+	private float timeElapsed = 0.0f;
+	private float rotationSpeed = 0.5f;
+	private float roundMotionSize = 4.0f;
+
 	private float earthDiameter = 2.0f;
 	private float angle;
 
@@ -62,8 +66,11 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	private void update() {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		cam.update(deltaTime);
-		angle += 50f * deltaTime;
-
+		angle += 20f * deltaTime;
+		timeElapsed += deltaTime;
+		cam.Look3D(new Point3D(-(float)Math.cos(timeElapsed * rotationSpeed) * roundMotionSize, 0.0f, -(float) Math.sin(timeElapsed * rotationSpeed) * roundMotionSize),
+				new Point3D(0,(float)Math.sin(timeElapsed * rotationSpeed) * (roundMotionSize/4),0), new Vector3D(0,1,0));
+		System.out.println(cam);
 	}
 
 	private void display() {
@@ -121,6 +128,14 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		display();
 
 	}
+
+	/*
+	* eye = (cos(elapsedTime * incrementFactor) * sizeFactor , y , sin(elapsedTime * incrementFactor) * sizeFactor);
+	* center = (0, sin(elapsedTime * incrementFactor) * sizeFactor , 0);
+	* lookAt(eye, center, (0,1,0));
+	*
+	* */
+
 
 	@Override
 	public boolean keyDown(int keycode) {

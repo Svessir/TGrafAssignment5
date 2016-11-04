@@ -188,10 +188,6 @@ public class Camera {
 		slide(velocity.x, velocity.y, velocity.z);
 	}
 
-	public boolean isLightTurnedOn() {
-		return turnedOn;
-	}
-
 	public Vector3D getLightDirection() {
 		return turnedOn ? new Vector3D(-n.x, -n.y, -n.z) : new Vector3D(n.x, n.y, n.z);
 	}
@@ -216,9 +212,6 @@ public class Camera {
 		if(Gdx.input.isKeyPressed(Input.Keys.D)) {
 			velocity.x += speed  * deltaTime;
 		}
-		/*if(Gdx.input.isKeyPressed(Input.Keys.R)) {
-			velocity.y -= speed  * deltaTime;
-		}*/
 		if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 			turnedOn = !turnedOn;
 		}
@@ -234,6 +227,10 @@ public class Camera {
 		velocity.x = oldVelocity.x * u.x + oldVelocity.y * v.x + oldVelocity.z * n.x;
 		//velocity.y = oldVelocity.x * u.x + oldVelocity.y * v.x + oldVelocity.z * n.x;
 		velocity.z = oldVelocity.x * u.z + oldVelocity.y * v.z + oldVelocity.z * n.z;
+	}
+
+	public String toString(){
+		return "position : (" + eye.x + ", " + eye.y + ", " + eye.z;
 	}
 
 }
