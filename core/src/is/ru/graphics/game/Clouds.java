@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import is.ru.graphics.math.ModelMatrix;
 import is.ru.graphics.math.Point3D;
+import is.ru.graphics.math.Vector3D;
 import is.ru.graphics.shaders.CloudShader;
 import is.ru.graphics.shapes.SphereGraphic;
 
@@ -14,11 +15,11 @@ import is.ru.graphics.shapes.SphereGraphic;
 public class Clouds implements Animatable{
     private float diameter;
     private Texture texture;
-    CloudShader shader;
+    private float scale = 1.01f;
+    CloudShader cloudShader;
 
-    public Clouds(CloudShader shader, float diameter){
-        this.shader = shader;
-        this.diameter = diameter;
+    public Clouds(){
+        cloudShader = new CloudShader();
         this.texture = new Texture(Gdx.files.internal("textures/Clouds.png"));
 
     }
@@ -35,24 +36,25 @@ public class Clouds implements Animatable{
 
         Camera cam = Camera.getInstance();
         Point3D lightPosition = Sun.getInstance().getPosition();
+        Vector3D lightColor = Sun.getInstance().getColor();
 
-        shader.useShader();
-        shader.setViewMatrix(cam.getViewMatrix());
-        shader.setProjectionMatrix(cam.getProjectionMatrix());
-        shader.setLightPosition(lightPosition);
-        shader.setCameraLightDirection(cam.getLightDirection());
-        shader.setCameraLightPosition(cam.eye);
-        shader.setCameraPosition(cam.eye);
-        shader.setLightAmbient(0f,0f,0f,1);
-        shader.setLightDiffuse(1,1,1,1);
-        shader.setLightSpecular(0,0,0,1);
+        cloudShader.useShader();
+        cloudShader.setViewMatrix(cam.getViewMatrix());
+        cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
+        cloudShader.setLightPosition(lightPosition);
+        cloudShader.setCameraLightDirection(cam.getLightDirection());
+        cloudShader.setCameraLightPosition(cam.eye);
+        cloudShader.setCameraPosition(cam.eye);
+        cloudShader.setLightAmbient(0f,0f,0f,1);
+        cloudShader.setLightDiffuse(lightColor.x,lightColor.y,lightColor.z,1);
+        cloudShader.setLightSpecular(0,0,0,1);
 
         ModelMatrix.main.pushMatrix();
-        ModelMatrix.main.addScale(diameter,diameter,diameter);
-        shader.setMaterialDiffuse(1,1,1,1);
-        shader.setModelMatrix(ModelMatrix.main.getMatrix());
-        shader.setAlphaTexture(texture);
-        SphereGraphic.drawSolidSphere(shader);
+        ModelMatrix.main.addScale(scale,scale,scale);
+        cloudShader.setMaterialDiffuse(1,1,1,1); // WHITE skies;
+        cloudShader.setModelMatrix(ModelMatrix.main.getMatrix());
+        cloudShader.setAlphaTexture(texture);
+        SphereGraphic.drawSolidSphere(cloudShader);
         ModelMatrix.main.popMatrix();
 
         Gdx.gl.glDisable(GL20.GL_BLEND);

@@ -9,13 +9,13 @@ import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
 import is.ru.graphics.shaders.CloudShader;
 import is.ru.graphics.shaders.EarthShader;
+import is.ru.graphics.shapes.PlanetAtmosphereGraphic;
 import is.ru.graphics.shapes.SphereGraphic;
 import is.ru.graphics.sounds.Sounds;
 
 public class EarthProject extends ApplicationAdapter implements InputProcessor {
 
 	private EarthShader earthShader;
-	private CloudShader cloudShader;
 	private Camera cam;
 	private Animatable earth;
 	private Animatable clouds;
@@ -27,7 +27,6 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public void create() {
 		earthShader = new EarthShader();
-		cloudShader = new CloudShader();
 
 		/*backgroundSounds = new Sounds();
 		try {
@@ -37,6 +36,7 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		}*/
 
 		SphereGraphic.create();
+		PlanetAtmosphereGraphic.create();
 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -54,11 +54,8 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		cam.Look3D(new Point3D(2, 2, 2), new Point3D(0, 0, 0), new Vector3D(0, 1, 0));
 		earthShader.setViewMatrix(cam.getViewMatrix());
 		earthShader.setProjectionMatrix(cam.getProjectionMatrix());
-		cloudShader.setViewMatrix(cam.getViewMatrix());
-		cloudShader.setProjectionMatrix(cam.getProjectionMatrix());
 
 		earth = new Earth(earthShader,earthDiameter);
-		clouds = new Clouds(cloudShader, earthDiameter*1.01f);
 	}
 
 	private void update() {
@@ -77,10 +74,6 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		ModelMatrix.main.loadIdentityMatrix();
 
 		earth.draw();
-
-		clouds.draw();
-
-
 	}
 
 	@Override
