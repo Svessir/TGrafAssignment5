@@ -46,7 +46,7 @@ public class Camera implements Animatable {
 	}
 
 	private Camera(){
-		skyboxTexture = new Texture(Gdx.files.internal("textures/milky_Way.jpg"));
+		skyboxTexture = new Texture(Gdx.files.internal("textures/starmap.png")); //milky_Way.jpg,starmap_4k.jpg, starmap_g16k.jpg,starmap.png
 		skyBoxShader = new SkyBoxShader();
 		matrixBuffer = BufferUtils.newFloatBuffer(16);
 
