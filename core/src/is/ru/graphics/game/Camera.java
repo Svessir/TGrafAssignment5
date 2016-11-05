@@ -4,11 +4,17 @@ import java.nio.FloatBuffer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.BufferUtils;
+import is.ru.graphics.math.ModelMatrix;
 import is.ru.graphics.math.Point3D;
 import is.ru.graphics.math.Vector3D;
+import is.ru.graphics.shaders.SkyBoxShader;
+import is.ru.graphics.shapes.PlanetAtmosphereGraphic;
+import is.ru.graphics.shapes.SphereGraphic;
 
-public class Camera {
+public class Camera implements Animatable {
 	public Vector3D n;
 	private Vector3D u;
 	private Vector3D v;
@@ -22,6 +28,8 @@ public class Camera {
 	private float top;
 	private float near;
 	private float far;
+	private Texture skyboxTexture;
+	private SkyBoxShader skyBoxShader;
 
 	private boolean turnedOn = false;
 
@@ -38,6 +46,8 @@ public class Camera {
 	}
 
 	private Camera(){
+		skyboxTexture = new Texture(Gdx.files.internal("textures/milky_Way.jpg"));
+		skyBoxShader = new SkyBoxShader();
 		matrixBuffer = BufferUtils.newFloatBuffer(16);
 
 		eye = new Point3D();
@@ -192,6 +202,21 @@ public class Camera {
 	public void update(float deltatime) {
 		input(deltatime);
 		slide(velocity.x, velocity.y, velocity.z);
+	}
+
+	@Override
+	public void draw() {
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(eye.x, eye.y, eye.z);
+		skyBoxShader.useShader();
+		skyBoxShader.setDiffuseTexture(skyboxTexture);
+		skyBoxShader.setModelMatrix(ModelMatrix.main.getMatrix());
+		skyBoxShader.setViewMatrix(Camera.getInstance().getViewMatrix());
+		skyBoxShader.setProjectionMatrix(Camera.getInstance().getProjectionMatrix());
+		Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
+		SphereGraphic.drawSolidSphere(skyBoxShader);
+		Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+		ModelMatrix.main.popMatrix();
 	}
 
 	public boolean isLightTurnedOn() {
