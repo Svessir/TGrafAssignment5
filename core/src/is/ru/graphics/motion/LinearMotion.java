@@ -1,4 +1,6 @@
-package is.ru.graphics.math;
+package is.ru.graphics.motion;
+
+import is.ru.graphics.math.Point3D;
 
 /**
  * Created by Kárii on 3.11.2016.

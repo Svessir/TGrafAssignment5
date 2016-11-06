@@ -15,7 +15,6 @@ uniform vec4 u_cameraPosition;
 uniform vec4 u_lightPosition;
 uniform vec4 u_cameraLightPosition;
 
-varying vec4 v_color;
 varying vec4 v_s;
 varying vec4 v_h;
 varying vec4 v_normal;

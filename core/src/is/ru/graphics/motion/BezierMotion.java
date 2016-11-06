@@ -1,4 +1,6 @@
-package is.ru.graphics.math;
+package is.ru.graphics.motion;
+
+import is.ru.graphics.math.Point3D;
 
 /**
  * Created by Kárii on 3.11.2016.
@@ -37,5 +39,13 @@ public class BezierMotion {
             out_postion.y = (1.0f - t)*(1.0f - t)*(1.0f - t) * P1.y + 3*(1.0f - t) * (1.0f - t)*t* P2.y + 3*(1.0f - t)*t*t*P3.y + t*t*t*P4.y;
             out_postion.z = (1.0f - t)*(1.0f - t)*(1.0f - t) * P1.z + 3*(1.0f - t) * (1.0f - t)*t* P2.z + 3*(1.0f - t)*t*t*P3.z + t*t*t*P4.z;
         }
+    }
+
+    public float getStartTime(){
+        return startTime;
+    }
+
+    public float getEndTime(){
+        return endTime;
     }
 }
