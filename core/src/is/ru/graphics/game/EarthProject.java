@@ -143,7 +143,9 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 				forthBezier = false;
 			}
 		}
-		cam.update(deltaTime);
+		else{
+			cam.update(deltaTime);
+		}
 		System.out.println(cam);
 	}
 
@@ -154,7 +156,7 @@ public class EarthProject extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		ModelMatrix.main.loadIdentityMatrix();
-		//cam.draw();
+		cam.draw();
 		earth.draw();
 	}
 

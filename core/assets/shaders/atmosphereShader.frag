@@ -13,5 +13,6 @@ void main()
 	gl_FragColor = texture2D(u_gradientTexture, uv);
 
 	// configure the alpha so that it gradients with higher y value on the texture.
-	gl_FragColor.a = pow((1 - uv.y), 0.4);
+	// The exponent is just configured by visual preferance.
+	gl_FragColor.a = pow((1.0 - uv.y), 0.4);
 }

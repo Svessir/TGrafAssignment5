@@ -37,7 +37,6 @@ void main()
     v_sCam = normalize(u_cameraLightPosition - position);
 
 	position = u_viewMatrix * position;
-	//normal = u_viewMatrix * normal;
     v_normal = normal;
 
 	gl_Position = u_projectionMatrix * position;

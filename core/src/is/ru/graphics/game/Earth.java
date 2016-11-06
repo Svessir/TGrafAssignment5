@@ -59,7 +59,6 @@ public class Earth implements Animatable {
         earthShader.setCameraLightPosition(cam.eye);
         earthShader.setCameraLightDirection(cam.getLightDirection());
         earthShader.setCameraPosition(cam.eye);
-        earthShader.setLightDiffuse(lightColor.x,lightColor.y,lightColor.z, 1);
         earthShader.setLightSpecular(0,0,0,0);
 
         earthShader.setMaterialShininess(150);

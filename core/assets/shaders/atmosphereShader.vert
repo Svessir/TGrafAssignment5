@@ -24,6 +24,7 @@ void main()
 	vec4 normal = normalize(vec4(a_normal.x, a_normal.y, a_normal.z, 0.0));
 	normal = normalize(u_modelMatrix * normal);
 
+	vec4 transformedOrigin = u_modelMatrix * vec4(0,0,0,1);
 
     vec4 s = normalize(u_lightPosition - position);
 
@@ -39,16 +40,20 @@ void main()
     float l = dot(s, normal);
 
     /**
-    Calculate the dot product between the vector of the sun from origin and the camera from origin (As the planet is stationed in origin).
+    Calculate the dot product between the vector of the sun from origin and the camera from origin.
     If the camera is the same direction of origin as the sun then the atmosphere should be more bluish as the camera is facing the dayside of earth.
     The value c will be added to the value l to add up to the side of the earth which has a redish atmosphere but should have bluish atmosphere due
     to the position of the camera (The dot product between the normals and sun vector is close to 0 as they are almost perpindicular).
     */
-    float c = dot(normalize(vec4(u_cameraPosition.x,u_cameraPosition.y,u_cameraPosition.z,0)),
-                      normalize(vec4(u_lightPosition.x,u_lightPosition.y,u_lightPosition.z, 0)));
-
-    c = clamp(c, 0, 1);
-    l = clamp(l + c, 0, 0.999);
+    float c = dot(normalize(vec4(u_cameraPosition.x - transformedOrigin.x, u_cameraPosition.y - transformedOrigin.y,
+                                 u_cameraPosition.z - transformedOrigin.z,0)),
+                      normalize(vec4(u_lightPosition.x - transformedOrigin.x, u_lightPosition.y - transformedOrigin.y,
+                                     u_lightPosition.z - transformedOrigin.z, 0)));
+    /**
+    clamp the c, and l+c values between 0 and 1, as those values are the min and max uv.x values
+    */
+    c = clamp(c, 0.0, 1.0);
+    l = clamp(l + c, 0.0, 0.999);
     uv.x = l;           // Determine the x value of the atmosphere in the gradient texture (left is dark while right is blue).
     v_uv = uv;
 

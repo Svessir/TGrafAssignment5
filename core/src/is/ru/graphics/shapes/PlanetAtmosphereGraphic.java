@@ -41,7 +41,7 @@ public class PlanetAtmosphereGraphic {
             }
             else
             {
-                vertex = new Point3D((float)Math.cos(it) * 1.1f,(float)Math.sin(it) * 1.1f, 0);
+                vertex = new Point3D((float)Math.cos(it) * 1.2f,(float)Math.sin(it) * 1.2f, 0);
                 Vector3D normal = new Vector3D
                         (
                             vertex.x - lastVertex.x,

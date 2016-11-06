@@ -14,6 +14,7 @@ varying vec2 v_uv;
 
 void main()
 {
+    // Transform the position of the vertex;
 	vec4 position = vec4(a_position.x, a_position.y, a_position.z, 1.0);
 	position = u_modelMatrix * position;
     position = u_viewMatrix * position;

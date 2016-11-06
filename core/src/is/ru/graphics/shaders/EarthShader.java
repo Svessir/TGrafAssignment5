@@ -13,7 +13,7 @@ public class EarthShader extends AbstractShader {
     protected int nightLightDiffuseTextureLoc;
 
     public EarthShader() {
-        super("shaders/simple3D.vert", "shaders/simple3D.frag");
+        super("shaders/earthShader.vert", "shaders/earthShader.frag");
 
         usesNightLightDiffuseTexLoc		= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_usesNightLightDiffuseTexture");
         nightLightDiffuseTextureLoc		= Gdx.gl.glGetUniformLocation(renderingProgramID, "u_nightLightDiffuseTexture");
