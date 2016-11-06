@@ -213,6 +213,11 @@ public abstract class AbstractShader implements Shader{
         Gdx.gl.glUseProgram(renderingProgramID);
     }
 
+    @Override
+    public boolean usesNormals() {
+        return true;
+    }
+
     protected void bindTexture(Texture tex, int layer, int textureLoc, int usesTextureLoc) {
         if(tex == null)
         {

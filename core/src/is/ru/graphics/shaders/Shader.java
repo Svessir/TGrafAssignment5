@@ -23,4 +23,6 @@ public interface Shader {
     void setProjectionMatrix(FloatBuffer matrix);
 
     boolean usesTexture();
+
+    boolean usesNormals();
 }

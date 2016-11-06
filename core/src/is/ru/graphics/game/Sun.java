@@ -1,6 +1,7 @@
 package is.ru.graphics.game;
 
 import is.ru.graphics.math.Point3D;
+import is.ru.graphics.math.Vector3D;
 
 /**
  * Created by Sverrir on 1.11.2016.
@@ -24,13 +25,9 @@ public class Sun implements Animatable {
         float s = (float)Math.sin((angle / 2.0) * Math.PI / 180.0);
         float c = (float)Math.cos((angle / 2.0) * Math.PI / 180.0);
 
-        angle += 50f * deltatime;
+        angle += 10f * deltatime;
 
-        if(angle > 360.0f)
-            angle -= 360.0f;
-
-        position.x += s;
-        position.y += c;
+        position = new Point3D(200 * c, 0, 100* s);
     }
 
     @Override
@@ -40,5 +37,10 @@ public class Sun implements Animatable {
 
     public Point3D getPosition() {
         return position;
+    }
+
+    public Vector3D getColor() {
+        // White light
+        return new Vector3D(1,1,1);
     }
 }
