@@ -99,24 +99,6 @@ public class Camera implements Animatable {
 		n.x = tmp;
 	}
 
-	public void yaw(float angle){
-		float c = (float)Math.cos((double)angle * Math.PI / 180.0);
-		float s = (float)Math.sin((double)angle * Math.PI / 180.0);
-		float tmp ;
-
-		tmp = c * u.x - s * n.x;
-		n.x = s * u.x + c * n.x;
-		u.x = tmp;
-
-		tmp = c * u.y - s * n.y;
-		n.y = s * u.y + c * n.y;
-		u.y = tmp;
-
-		tmp = c * u.z - s * n.z;
-		n.z = s * u.z + c * n.z;
-		u.z = tmp;
-	}
-
 	public void pitch(float angle) {
 		float c = (float) Math.cos((double) angle * Math.PI / 180.0);
 		float s = (float) Math.sin((double) angle * Math.PI / 180.0);
@@ -134,16 +116,6 @@ public class Camera implements Animatable {
 		tmp = v.z * c + n.z * s;
 		n.z = v.z * (-s) + n.z * c;
 		v.z = tmp;
-	}
-
-	public void OrthographicProjection3D(float left, float right, float bottom, float top, float near, float far) {
-		this.left = left;
-		this.right = right;
-		this.bottom = bottom;
-		this.top = top;
-		this.near = near;
-		this.far = far;
-		orthographic = true;
 	}
 
 	public void PerspctiveProjection3D(float fovy, float ratio, float near, float far) {
@@ -256,7 +228,6 @@ public class Camera implements Animatable {
 		Vector3D oldVelocity = velocity;
 		velocity = new Vector3D(0,0,0);
 		velocity.x = oldVelocity.x * u.x + oldVelocity.y * v.x + oldVelocity.z * n.x;
-		//velocity.y = oldVelocity.x * u.x + oldVelocity.y * v.x + oldVelocity.z * n.x;
 		velocity.z = oldVelocity.x * u.z + oldVelocity.y * v.z + oldVelocity.z * n.z;
 	}
 

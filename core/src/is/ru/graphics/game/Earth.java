@@ -45,7 +45,6 @@ public class Earth implements Animatable {
     public void draw() {
         Camera cam = Camera.getInstance();
         Point3D lightPosition = Sun.getInstance().getPosition();
-        Vector3D lightColor = Sun.getInstance().getColor();
 
         ModelMatrix.main.pushMatrix();
         ModelMatrix.main.addScale(diameter,diameter,diameter);

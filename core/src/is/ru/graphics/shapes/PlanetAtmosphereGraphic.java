@@ -20,7 +20,7 @@ public class PlanetAtmosphereGraphic {
     private static FloatBuffer uvBuffer;
 
 
-    public static void create(){
+    public static void create(float atmosphereHeight){
         float it = 0.0f;
         vertexBuffer = BufferUtils.newFloatBuffer(6*(verticesPerCircle + 1));
         normalBuffer = BufferUtils.newFloatBuffer(6*(verticesPerCircle + 1));
@@ -41,7 +41,7 @@ public class PlanetAtmosphereGraphic {
             }
             else
             {
-                vertex = new Point3D((float)Math.cos(it) * 1.2f,(float)Math.sin(it) * 1.2f, 0);
+                vertex = new Point3D((float)Math.cos(it) * atmosphereHeight,(float)Math.sin(it) * atmosphereHeight, 0);
                 Vector3D normal = new Vector3D
                         (
                             vertex.x - lastVertex.x,
